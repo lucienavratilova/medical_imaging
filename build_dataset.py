@@ -72,10 +72,11 @@ def save_dataset(X, y, output_path="data/dataset.csv"):
     df.to_csv(output_path, index=False)
     print(f"dataset saved to {output_path}")
 
-X, y = build_dataset(
-    'data/metadata.csv',
-    'data/images/',
-    'data/masks/'
-)
+if __name__ == "__main__":
+    X, y = build_dataset(
+        'data/metadata.csv',
+        'data/images/',
+        'data/masks/'
+    )
 
-save_dataset(X, y)
+    save_dataset(X, y)
