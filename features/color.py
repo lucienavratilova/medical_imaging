@@ -7,13 +7,8 @@ def prep_image(image_path, mask_path):
     '''
     image = cv2.imread(image_path) # load the image
     mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-    
-    # crop the image according to the image mask
-    cropped_image = cv2.bitwise_and(image, image, mask=mask)
-    # convert the cropped image to HSV
-    cropped_hsv = cv2.cvtColor(cropped_image, cv2.COLOR_RGB2HSV) 
 
-    return cropped_hsv, mask
+    return image, mask
 
 def extract_color_features(image, mask, bins=16):
     # apply mask (crop lesion)
