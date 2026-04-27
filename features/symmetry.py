@@ -1,9 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import cv2
 
-def prep_image(image_path):
-    image = cv2.imread(image_path)
+def load_mask(mask_path):
+    image = cv2.imread(mask_path)
 
     # convert to grayscale from RGB (single channel)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
@@ -11,14 +10,17 @@ def prep_image(image_path):
     # turn grayscale into binary image
     _, mask = cv2.threshold(gray, 127, 1, cv2.THRESH_BINARY)
 
+    return mask
+
+def preprocess_image(mask):
     # compute moments on mask
     M = cv2.moments(mask)
     
     # calculate x,y coordinate of center
     cX = int(M["m10"] / M["m00"]) # m00 = # of white pixels
-    cY = int(M["m01"] / M["m00"]) # m10 / m01 = sum of x / y pixels
+    cY = int(M["m01"] / M["m00"]) # m10 / m01 = sum of x / y pixels 
 
-    return mask, cX, cY
+    return cX, cY
 
 def flip_vertically(mask, cX, cY):
     left = mask[:, :cX] # all rows, everything left of center
@@ -56,12 +58,10 @@ def flip_horizontally(mask, cX, cY):
 def total_symmetry(symmetry_vertical, symmetry_horizontal):
     return (symmetry_vertical + symmetry_horizontal) / 2
 
-if __name__ == "__main__":
-    image_path = "features/circle.jpg"
-
-    mask, cX, cY = prep_image(image_path)
-
-    symmetry_vertical = flip_vertically(mask, cX, cY)
-    symmetry_horizontal = flip_horizontally(mask, cX, cY)
-
-    print("Total symmetry:", total_symmetry(symmetry_vertical, symmetry_horizontal))
+def get_symmetry(mask_path):
+    mask = load_mask(mask_path)
+    cX, cY = preprocess_image(mask)
+    vertical_score = flip_vertically(mask, cX, cY)
+    horizotanl_score = flip_horizontally(mask, cX, cY)
+    
+    return total_symmetry(vertical_score, horizotanl_score)

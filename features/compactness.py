@@ -10,21 +10,17 @@ def prep_image(image_path):
     # turn grayscale into binary image
     _, mask = cv2.threshold(gray, 127, 1, cv2.THRESH_BINARY)
 
-    # find contours
-    contours, _ = cv2.findContours(mask, 1, 2)
+    return mask # pick the largest contour
 
-    return max(contours, key=cv2.contourArea) # pick the largest contour
+def compute_compactness(mask):
+    contours, _ = cv2.findContours(mask, 1, 2) # find contours
+    contour = max(contours, key=cv2.contourArea) # pick the largest contour
 
-def compute_compactness(contour):
     area = cv2.contourArea(contour) # measure the area
     perimeter = cv2.arcLength(contour, True) # measure the boundary length
     return (4 * np.pi * area) / (perimeter**2)
 
-if __name__ == "__main__":
-    image_path = "features/circle.jpg"
+def get_compactness(mask_path):
+    mask = prep_image(mask_path)
 
-    contour = prep_image(image_path)
-
-    compactness = compute_compactness(contour)
-
-    print("Compactness is:", compactness)
+    return compute_compactness(mask)

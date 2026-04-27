@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 
 def prep_image(image_path, mask_path):
+    '''
+    Loads the image, crops it and converts it to hsv
+    '''
     image = cv2.imread(image_path) # load the image
     mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
 
@@ -15,7 +18,6 @@ def prep_image(image_path, mask_path):
     return cropped_hsv, mask
 
 def bluewhite_veil(image, mask):
-    
     # define bounds for color detection - HUE | SATURATION | VALUE (brightness)
     lower_blue = np.array([90, 20, 80])
     upper_blue = np.array([150, 150, 150])
@@ -29,11 +31,7 @@ def bluewhite_veil(image, mask):
 
     return round(veil_area / total_area, 4)
 
-if __name__ == "__main__":
-    image_path = 'data/images/PAT_67_104_695.png'
-    mask_path = 'data/masks/PAT_67_104_695_mask.png'
-
+def get_bwv(image_path, mask_path):
     image, mask = prep_image(image_path, mask_path)
-    bluewhite_veil = bluewhite_veil(image, mask)
 
-    print('Blue white veil coverage ratio is:', bluewhite_veil)
+    return bluewhite_veil(image, mask)
