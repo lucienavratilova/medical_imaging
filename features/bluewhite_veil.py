@@ -7,13 +7,11 @@ def prep_image(image_path, mask_path):
     '''
     image = cv2.imread(image_path) # load the image
     mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # from BRG to RGB
     
     # crop the image according to the image mask
-    cropped_rgb = cv2.bitwise_and(image_rgb, image_rgb, mask=mask)
+    cropped_image = cv2.bitwise_and(image, image, mask=mask)
     # convert the cropped image to HSV
-    cropped_hsv = cv2.cvtColor(cropped_rgb, cv2.COLOR_RGB2HSV) 
+    cropped_hsv = cv2.cvtColor(cropped_image, cv2.COLOR_RGB2HSV) 
 
     return cropped_hsv, mask
 

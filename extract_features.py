@@ -7,10 +7,10 @@ from features.color import get_color
 
 
 def extract_features(image_path, mask_path):
-    """
+    '''
     Returns feature vector:
     [asymmetry, compactness, bwv, color_histogram...]
-    """
+    '''
     # features
     a = get_symmetry(mask_path=mask_path)
     c = get_compactness(mask_path=mask_path)
