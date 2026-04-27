@@ -4,7 +4,6 @@ import numpy as np
 
 from extract_features import extract_features
 
-
 def map_label(diagnostic):
     '''
     Maps diagnostic → 0 (benign) or 1 (malignant)
